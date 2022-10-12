@@ -1,5 +1,6 @@
 import { View, Text, FlatList, Dimensions, TouchableOpacity, Image } from 'react-native'
 import React, { useRef, useState } from 'react'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Video from 'react-native-video'
 import DATA from '../global/DATA'
 import { BookmarkIcon, HeartIcon, MusicalNoteIcon, PlusIcon } from 'react-native-heroicons/solid'
@@ -10,25 +11,27 @@ import COLORS from '../global/COLORS'
 import { useNavigation } from '@react-navigation/native'
 
 const VideoList = () => {
-  const [currentIndex, setCurrentIndex] = useState(null);
-  const handleViewableItemsChanged = useRef(({ viewableItems }) => {
-    setCurrentIndex(viewableItems[0].index);
-  }).current;
+  const { height } = Dimensions.get('window');
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const bottomTabHeight = useBottomTabBarHeight();
 
   return (
     <FlatList
       data={DATA.videoList}
       keyExtractor={item => item.id}
       pagingEnabled
-      onViewableItemsChanged={handleViewableItemsChanged}
-      renderItem={({ item, index }) => <VideoCard data={item} index={index} currentIndex={currentIndex}/>}
+      onScroll={(event) => {
+        const index = Math.round(event.nativeEvent.contentOffset.y / ( height - bottomTabHeight), );
+        setActiveVideoIndex(index);
+      }}
+      renderItem={({ item, index }) => <VideoCard data={item} isActive={activeVideoIndex === index}/>}
     />
   )
 }
 
-const VideoCard = ({ data, index, currentIndex }) => {
+const VideoCard = ({ data, isActive }) => {
   const navigation = useNavigation();
-  
+  const bottomTabHeight = useBottomTabBarHeight();
   const [isPaused, setIsPaused] = useState(false);
   const [isLike, setIsLike] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -41,19 +44,21 @@ const VideoCard = ({ data, index, currentIndex }) => {
   }
 
   return (
-    <View className='bg-black' style={{ width: width, height: height - 48}} >
+    <View className='bg-black' style={{ width: width, height: height - bottomTabHeight}}>
+
+      {/* video */}
       <TouchableOpacity onPress={() => handlePause()} activeOpacity={1}>
         <Video 
           videoRef={videoRef}
           source={data.video}
           repeat={true}
           resizeMode="cover"
-          paused={isPaused}
-          muted={currentIndex === index ? false : true}
+          paused={!isActive}
           style={{ width: '100%', height: '100%'}}
         />
       </TouchableOpacity>
-        
+
+      {/* buttons */}
       <View className='flex-1 items-end flex-col-reverse absolute w-full h-full'>
         <View className='flex-1 justify-end mr-2 items-center pb-4 space-y-3'>
 
@@ -118,6 +123,7 @@ const VideoCard = ({ data, index, currentIndex }) => {
         </View>
       </View>
 
+      {/* details */}
       <View className='pl-3 pb-6 bottom-0 absolute w-[60%] justify-between space-y-2'>
         <View className='flex-row items-center'>
         <Text className='font-ProximaNovaSemiBold text-base text-white'>{data.displayName}</Text>
