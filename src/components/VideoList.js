@@ -1,14 +1,16 @@
-import { View, Text, FlatList, Dimensions, TouchableOpacity, Image } from 'react-native'
-import React, { useRef, useState } from 'react'
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { Animated, View, Text, FlatList, Dimensions, TouchableOpacity, Image, Easing } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import Video from 'react-native-video'
-import DATA from '../global/DATA'
-import { BookmarkIcon, HeartIcon, MusicalNoteIcon, PlusIcon } from 'react-native-heroicons/solid'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native'
+import { BookmarkIcon, CheckIcon, HeartIcon, MusicalNoteIcon, PlusIcon } from 'react-native-heroicons/solid'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import TextTicker from 'react-native-text-ticker'
 
+import DATA from '../global/DATA'
 import COLORS from '../global/COLORS'
-import { useNavigation } from '@react-navigation/native'
+import FONTS from '../global/FONTS'
 
 const VideoList = () => {
   const { height } = Dimensions.get('window');
@@ -24,44 +26,63 @@ const VideoList = () => {
         const index = Math.round(event.nativeEvent.contentOffset.y / ( height - bottomTabHeight), );
         setActiveVideoIndex(index);
       }}
-      renderItem={({ item, index }) => <VideoCard data={item} isActive={activeVideoIndex === index}/>}
+      renderItem={({ item, index }) => <VideoCard data={item} isActive={activeVideoIndex === item.id} />}
     />
   )
 }
 
 const VideoCard = ({ data, isActive }) => {
   const navigation = useNavigation();
+  const { width, height } = Dimensions.get('window');
   const bottomTabHeight = useBottomTabBarHeight();
-  const [isPaused, setIsPaused] = useState(false);
   const [isLike, setIsLike] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const { width, height } = Dimensions.get('window');
-  const videoRef = useRef(null);
+  // see more caption
+  const [isTruncatedCaption, setIsTruncatedCaption] = useState(true);
+  const captionLimit = 77;
+  const resultCaption = isTruncatedCaption ? data.caption.slice(0, captionLimit) : data.caption;
+  
+  // disc animation
+  const discAnimationValue = useRef(new Animated.Value(0)).current;
+  const discAnimation = {
+    transform: [
+      {
+        rotate: discAnimationValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0deg', '360deg'],
+        }),
+      },
+    ],
+  };
 
-  const handlePause = () => {
-    setIsPaused(prevState => !prevState);
-  }
+  useEffect(() => {
+      Animated.loop(
+        Animated.timing(discAnimationValue, {
+          toValue: 1,
+          duration: 5000,
+          easing: Easing.linear,
+          useNativeDriver: false,
+        }),
+        ).start();
+      }, [discAnimationValue]);
 
   return (
     <View className='bg-black' style={{ width: width, height: height - bottomTabHeight}}>
-
       {/* video */}
-      <TouchableOpacity onPress={() => handlePause()} activeOpacity={1}>
-        <Video 
-          videoRef={videoRef}
+      {/* <TouchableOpacity activeOpacity={1}>
+        <Video
           source={data.video}
           repeat={true}
           resizeMode="cover"
           paused={!isActive}
           style={{ width: '100%', height: '100%'}}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* buttons */}
       <View className='flex-1 items-end flex-col-reverse absolute w-full h-full'>
         <View className='flex-1 justify-end mr-2 items-center pb-4 space-y-3'>
-
           {/* avatar */}
           <View className='mb-2'>
             <TouchableOpacity onPress={() => navigation.navigate('AnotherScreen')} className='bg-white rounded-full w-12 h-12 border-white border-2'>
@@ -110,34 +131,68 @@ const VideoCard = ({ data, isActive }) => {
           </View>
           
           {/* audio */}
-          <View>
-            <TouchableOpacity className='bg-white rounded-full w-10 h-10 border-white border-2'>
-              <Image
+          <TouchableOpacity className='rounded-full w-[50px] h-[50px] justify-center items-center'>
+            <Animated.Image
+              source={require('../assets/images/disc-icon.png')}
+              resizeMode='contain'
+              className='w-full h-full rounded-full'
+              style={discAnimation}
+            />
+            <View className='absolute w-full h-full justify-center items-center'>
+              <Animated.Image
                 source={data.avatar}
                 resizeMode='contain'
-                className='w-full h-full rounded-full'
-              />
-            </TouchableOpacity>
-          </View>
+                className='h-1/2 rounded-full w-1/2'
+                style={discAnimation}
+                />
+            </View>
+          </TouchableOpacity>
 
         </View>
       </View>
 
       {/* details */}
-      <View className='pl-3 pb-6 bottom-0 absolute w-[60%] justify-between space-y-2'>
-        <View className='flex-row items-center'>
-        <Text className='font-ProximaNovaSemiBold text-base text-white'>{data.displayName}</Text>
-        <Text className='font-ProximaNovaSemiBold text-sm text-secondary'>•{data.date}</Text>
+      <View className='pl-3 pb-6 bottom-0 absolute w-[60%] justify-between space-y-1'>
+        <View className='flex-row items-center -mb-2'>
+          <Text className='font-ProximaNovaSemiBold text-base text-white'>{data.displayName}</Text>
+          {
+            data.isVerified &&
+            <View className='rounded-full justify-center items-center bg-[#20D5EC] p-[1px] ml-1'>
+              <CheckIcon size={10} color={COLORS.white} />
+            </View>
+          }
+          <Text className='font-semibold text-sm text-secondary'> • </Text>
+          <Text className='font-ProximaNovaSemiBold text-sm text-secondary'>{data.date}</Text>
         </View>
-        <Text className='font-ProximaNovaRegular text-[15px] text-white' numberOfLines={4}>{data.caption}</Text>
-        <View className='flex-row items-center space-x-2'>
-          <MusicalNoteIcon size={17} color={COLORS.white}/>
-          <Text className='font-ProximaNovaRegular text-[15px] text-white' numberOfLines={1}>{data.soundName}</Text>
+        {/* see more / hide */}
+        <View className='flex-row items-end'>
+          <Text className='text-[15px] text-white' style={{ lineHeight: 25}}>{resultCaption}</Text>
+          {
+            data.caption.length >= captionLimit &&
+            <TouchableOpacity onPress={() => setIsTruncatedCaption(!isTruncatedCaption)}>
+              <Text className='font-ProximaNovaSemiBold text-sm text-white'>{isTruncatedCaption === true ? ' ... See more' : 'Hide'}</Text>
+            </TouchableOpacity> 
+          }
+        </View>
+        {/* see translation */}
+        <TouchableOpacity>
+          <Text className='font-ProximaNovaSemiBold text-sm text-white'>See translation</Text>
+        </TouchableOpacity>
+        {/* sounds-marque label */}
+        <View className='flex-row items-center space-x-1'>
+          <MusicalNoteIcon size={17} color={COLORS.white} style={{ marginRight: 5}}/>
+          <TextTicker 
+            style={{ fontSize: 15, color: COLORS.white}}
+            duration={15000}
+            marqueeOnMount={true}
+            marqueeDelay={-20}
+            loop={true}
+            repeatSpacer={5}
+          >
+            {data.soundName}
+          </TextTicker>
         </View>
       </View>
-
-
-
 
     </View>
   )

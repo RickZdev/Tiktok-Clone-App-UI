@@ -1,13 +1,10 @@
-import { View, Text, Pressable, Dimensions, TouchableOpacity, Image } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React, { useRef } from 'react'
-import Video from 'react-native-video'
 import VideoList from '../components/VideoList';
 import { MagnifyingGlassIcon } from 'react-native-heroicons/solid';
 import COLORS from '../global/COLORS';
 
-const HomeScreen = ({ navigation }) => {
-  const videoRef = useRef(null);
-  const { width, height } = Dimensions.get('window');
+const HomeScreen = () => {
   return (
     <View className='flex-1'>
       {/* header */}
