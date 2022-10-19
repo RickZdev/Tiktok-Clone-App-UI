@@ -1,3 +1,10 @@
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+import Octicons from 'react-native-vector-icons/Octicons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
+import COLORS from './COLORS'
+
 export default DATA = {
     videoList: [
       {
@@ -72,4 +79,65 @@ export default DATA = {
         isVerified: false,
       },
     ],
+    profileButton: [
+      {
+        id: 0,
+        name: 'grip-vertical',
+        activeIcon: <FontAwesome5 name='grip-vertical' size={20} color={COLORS.black} />,
+        inactiveIcon: <FontAwesome5 name='grip-vertical' size={20} color={COLORS.gray}/>
+      },
+      {
+        id: 1,
+        name: 'lock',
+        activeIcon: <SimpleLineIcons name='lock' size={20} color={COLORS.black}/>,
+        inactiveIcon: <SimpleLineIcons name='lock' size={20} color={COLORS.gray}/>
+
+      },
+      {
+        id: 2,
+        name: 'bookmark-slash',
+        activeIcon: <Octicons name='bookmark-slash' size={20} color={COLORS.black}/>,
+        inactiveIcon: <Octicons name='bookmark-slash' size={20} color={COLORS.gray}/>
+
+      },
+      {
+        id: 3,
+        name: 'heart-off-outline',
+        activeIcon: <MaterialCommunityIcons name='heart-off-outline' size={20} color={COLORS.black}/>,
+        inactiveIcon: <MaterialCommunityIcons name='heart-off-outline' size={20} color={COLORS.gray}/>
+
+      },
+    ],
+    videoSection: [
+      {
+        id: 0,
+        gif: require('../assets/gifs/gif1.gif'),
+        views: '1038',
+      },
+      {
+        id: 1,
+        gif: require('../assets/gifs/gif2.gif'),
+        views: '6367',
+      },
+      {
+        id: 2,
+        gif: require('../assets/gifs/gif3.gif'),
+        views: '17.5K',
+      },
+      {
+        id: 3,
+        gif: require('../assets/gifs/gif4.gif'),
+        views: '757',
+      },
+      {
+        id: 4,
+        gif: require('../assets/gifs/gif5.gif'),
+        views: '803',
+      },
+      {
+        id: 5,
+        gif: require('../assets/gifs/gif6.gif'),
+        views: '735',
+      },
+    ]
   }

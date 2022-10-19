@@ -70,7 +70,7 @@ const VideoCard = ({ data, isActive }) => {
   return (
     <View className='bg-black' style={{ width: width, height: height - bottomTabHeight}}>
       {/* video */}
-      {/* <TouchableOpacity activeOpacity={1}>
+      <TouchableOpacity activeOpacity={1}>
         <Video
           source={data.video}
           repeat={true}
@@ -78,7 +78,7 @@ const VideoCard = ({ data, isActive }) => {
           paused={!isActive}
           style={{ width: '100%', height: '100%'}}
         />
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
       {/* buttons */}
       <View className='flex-1 items-end flex-col-reverse absolute w-full h-full'>
