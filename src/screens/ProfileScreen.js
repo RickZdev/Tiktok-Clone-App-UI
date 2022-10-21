@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, TouchableOpacity, Pressable, Dimensions } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Pressable, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -7,9 +7,10 @@ import Octicons from 'react-native-vector-icons/Octicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
+import SectionButtonList from '../components/SectionButtonList'
+import CustomCircle from '../components/CustomCircle'
 import COLORS from '../global/COLORS'
 import DATA from '../global/DATA'
-import SectionButtonList from '../components/SectionButtonList'
 
 const ProfileScreen = () => {
   const [selectedSection, setSelectedSection] = useState(0);
@@ -31,12 +32,7 @@ const ProfileScreen = () => {
         {/* profile pic */}
         <View className='justify-center items-center mt-3'>
           <View className='w-24 h-24 rounded-full'>
-            <Image 
-              source={require('../assets/images/avatar1.jpg')}
-              resizeMode='cover'
-              className='w-full h-full rounded-full'
-            />
-
+            <CustomCircle image={require('../assets/images/avatar1.jpg')} size='100%' withColor={false}/>
             <View className='bg-[#20D5EC] absolute z-20 bottom-[2px] right-[2px] w-[25px] h-[25px] rounded-full border-2 border-white justify-center items-center'>
               <Entypo name='plus' size={17} color={COLORS.white}/>
             </View>
@@ -98,7 +94,6 @@ const ProfileScreen = () => {
             ))
           }
         </View>
-        
 
         {/* sections */}
         <View>

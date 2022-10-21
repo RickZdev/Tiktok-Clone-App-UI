@@ -139,5 +139,73 @@ export default DATA = {
         gif: require('../assets/gifs/gif6.gif'),
         views: '735',
       },
+    ],
+    storiesList: [
+      {
+        id: 0,
+        avatar: require('../assets/images/avatar1.jpg'),
+        displayName: 'Fred',
+      },
+      {
+        id: 1,
+        avatar: require('../assets/images/avatar2.jpg'),
+        displayName: 'fonz',
+      },
+      {
+        id: 2,
+        avatar: require('../assets/images/avatar3.jpg'),
+        displayName: 'Joshua Garcia',
+      },
+      {
+        id: 3,
+        avatar: require('../assets/images/avatar4.jpg'),
+        displayName: 'esnyrr',
+      },
+      {
+        id: 4,
+        avatar: require('../assets/images/avatar5.jpg'),
+        displayName: 'daniel',
+      },
+    ],
+    activityList: [
+      {
+        id: 0,
+        avatar: require('../assets/images/avatar1.jpg'),
+        title: 'Joshua Garcia7265, Cervantes Carreon Je and 57 others',
+        time: '2h',
+        thumbnail: require('../assets/images/avatar2.jpg'),
+      },
+      {
+        id: 1,
+        avatar: require('../assets/images/avatar3.jpg'),
+        title: 'Lucii, KPDY and 76 others',
+        time: '4h',
+        thumbnail: require('../assets/images/avatar1.jpg'),
+      },
+      {
+        id: 2,
+        avatar: require('../assets/images/avatar4.jpg'),
+        title: 'Rakku, Nico Robin, and 331 others',
+        time: '5h',
+        thumbnail: require('../assets/images/avatar4.jpg'),
+      }
+    ],
+    likersList: [
+      {
+        id: 0,
+        avatar: require('../assets/images/avatar2.jpg'), 
+      },
+      {
+        id: 1,
+        avatar: require('../assets/images/avatar3.jpg'), 
+      },
+      {
+        id: 2,
+        avatar: require('../assets/images/avatar4.jpg'), 
+      },
+      {
+        id: 3,
+        avatar: require('../assets/images/avatar5.jpg'), 
+      },
     ]
-  }
+}

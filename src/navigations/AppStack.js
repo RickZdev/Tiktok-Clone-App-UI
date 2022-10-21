@@ -8,6 +8,7 @@ import BottomTab from './BottomTab';
 import AnotherScreen from '../screens/AnotherScreen';
 import AddScreen from '../screens/AddScreen';
 import CameraScreen from '../screens/CameraScreen';
+import StoryScreen from '../screens/StoryScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,7 +18,7 @@ const HomeStack = () => {
       <Stack.Screen name="HomeScreen" component={BottomTab} options={{ presentation: 'modal'}}/>
       <Stack.Screen name="AnotherScreen" component={AnotherScreen} options={{...TransitionPresets.SlideFromRightIOS}}/>
       <Stack.Screen name="CameraScreen" component={CameraScreen} options={{...TransitionPresets.ModalSlideFromBottomIOS}}/>
-
+      <Stack.Screen name="StoryScreen" component={StoryScreen} options={{...TransitionPresets.SlideFromRightIOS}}/>
     </Stack.Navigator>
   )
 }
